@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -56,12 +55,6 @@ func (g fileOptionGen) gen() {
 		return
 	}
 
-	body, err := json.Marshal(g)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	log.Println(string(body))
-
 	buf := BufWrite{
 		buf: bytes.NewBuffer(nil),
 	}
@@ -92,7 +85,7 @@ func (g fileOptionGen) gen() {
 
 	t := template.Must(template.New("tmp").Parse(templateText))
 
-	err = t.Execute(buf.buf, tmp)
+	err := t.Execute(buf.buf, tmp)
 	if err != nil {
 		log.Fatalf("cannot execute template: %v", err)
 	}

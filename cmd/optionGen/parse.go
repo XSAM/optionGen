@@ -45,16 +45,7 @@ func parseDir(dir string) {
 	}
 
 	for _, pkg := range pkgs {
-		log.Println("Package", pkg.Name)
-
 		for filePath, file := range pkg.Files {
-			buf := bytes.NewBufferString("")
-			printer.Fprint(buf, fset, file)
-			//source := buf.String()
-			//log.Println(source)
-			pos := fset.Position(file.Pos()).Offset
-
-			log.Println(pos)
 			if gogenerate.FileGeneratedBy(filePath, optionGen) {
 				continue
 			}
@@ -103,13 +94,11 @@ func parseDir(dir string) {
 										buf := bytes.NewBufferString("")
 										// Option func Type
 										printer.Fprint(buf, fset, value.Type)
-										log.Println("Type:", buf.String())
 										optionFields[i].Type = buf.String()
 
 										// Option func Body
 										buf.Reset()
 										printer.Fprint(buf, fset, value.Body)
-										log.Println("Body:", buf.String())
 										optionFields[i].Body = buf.String()
 									case *ast.CallExpr:
 										optionFields[i].FieldType = FieldType_Var
@@ -117,13 +106,11 @@ func parseDir(dir string) {
 
 										// Option Variable Type
 										printer.Fprint(buf, fset, value.Fun)
-										log.Println("Type:", buf.String())
 										optionFields[i].Type = buf.String()
 
 										// Option Variable Value
 										buf.Reset()
 										printer.Fprint(buf, fset, value.Args[0])
-										log.Println("Value:", buf.String())
 										optionFields[i].Body = buf.String()
 									}
 								}
