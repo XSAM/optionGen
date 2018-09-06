@@ -115,19 +115,19 @@ func goimportsBuf(buf *bytes.Buffer) (*bytes.Buffer, error) {
 
 const templateText = `
 {{- range $className, $optionList := .ClassOptionInfo }}
-type {{ $className }}Option struct {
+type {{ $className }}Options struct {
 	{{- range $index, $option := $optionList }}
 	{{ $option.Name }} {{ $option.Type }}
 	{{- end }}
 }
 
-type {{$className}}Op func(option *{{$className}}Option)
+type {{$className}}Op func(option *{{$className}}Options)
 {{ range $index, $option := $optionList }}
-func {{$className}}OpWith_{{$option.Name}}(value {{$option.Type}}) {{$className}}Op   { return func(option *{{$className}}Option) {option.{{$option.Name}} = value } }
+func {{$className}}OpWith_{{$option.Name}}(value {{$option.Type}}) {{$className}}Op   { return func(option *{{$className}}Options) {option.{{$option.Name}} = value } }
 {{- end }}
 
-func _New{{$className}}Option() *{{$className}}Option {
-	return &{{$className}}Option{
+func _New{{$className}}Options() {{$className}}Options {
+	return {{$className}}Options{
 {{- range $index, $option := $optionList }}
 	{{- if eq $option.FieldType 0 }}
 		{{ $option.Name }}: {{ $option.Type }} {{ $option.Body}},
